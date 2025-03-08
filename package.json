@@ -6,6 +6,6 @@
     "start": "node backend/dist/src/server.js"
   },
   "engines": {
-    "node": ">=14"
+    "node": "20.x"
   }
 }
