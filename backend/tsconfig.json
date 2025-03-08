@@ -13,7 +13,7 @@
     },
     "rootDirs": ["./src", "./tests"],
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["node", "jest"],
+    "types": ["node"],
     "resolveJsonModule": true,
     "outDir": "./dist",
     "esModuleInterop": true,
