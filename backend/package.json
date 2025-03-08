@@ -37,7 +37,9 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "tscpaths": "^0.0.9",
+    "typescript": "^5.6.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.12.0",
@@ -71,8 +73,6 @@
     "swagger-ui-express": "^5.0.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tscpaths": "^0.0.9",
-    "typescript": "^5.6.3",
     "typescript-eslint": "^8.9.0"
   }
 }
