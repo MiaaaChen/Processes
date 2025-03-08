@@ -15,6 +15,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "@src/swaggerOptions";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 
@@ -45,5 +46,13 @@ app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/event", eventRoutes);
+
+
+app.use(express.static(path.join(__dirname, "../../../frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../../frontend/build", "index.html"));
+});
+
 
 export default app;
