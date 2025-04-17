@@ -7,13 +7,16 @@ if (process.env.NODE_ENV === "test") {
     redisClient = new RedisMock();
     console.log("Using Redis mock client");
 } else {
-    const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
+    const redisUrl = process.env.REDIS_URL;
 
     if (!redisUrl) {
         throw new Error("REDIS_URL is not defined in environment variables.");
     }
 
-    redisClient = new Redis(redisUrl);
+    redisClient = new Redis(redisUrl, {
+        db: 0,
+        tls: {},
+    });
 
     redisClient.on("connect", () => {
         console.log("Connected to Redis");
