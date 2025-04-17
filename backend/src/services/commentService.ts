@@ -7,8 +7,8 @@ export class CommentService {
     /**
      * 建立新評論
      * 
-     * @param userId - 使用者ID
-     * @param content - 評論內容
+     * @param {string} userId - 使用者ID
+     * @param {string} content - 評論內容
      * 
      * 實作重點：
      * 1. 內容長度驗證
@@ -40,9 +40,9 @@ export class CommentService {
     /**
      * 更新評論
      * 
-     * @param commentId - 評論ID
-     * @param userId - 使用者ID
-     * @param content - 新的評論內容
+     * @param {string} commentId - 評論ID
+     * @param {string} userId - 使用者ID
+     * @param {string} content - 新的評論內容
      * 
      * 實作重點：
      * 1. 使用 updateOne 提高效能
@@ -78,8 +78,8 @@ export class CommentService {
     /**
      * 刪除評論
      * 
-     * @param commentId - 評論ID
-     * @param userId - 使用者ID
+     * @param {string} commentId - 評論ID
+     * @param {string} userId - 使用者ID
      * 
      * 實作重點：
      * 1. 使用事務確保一致性
@@ -126,8 +126,8 @@ export class CommentService {
     /**
      * 處理評論按讚功能
      * 
-     * @param commentId - 要按讚的評論ID
-     * @param userId - 執行按讚的使用者ID
+     * @param {string} commentId - 要按讚的評論ID
+     * @param {string} userId - 執行按讚的使用者ID
      * @returns Promise<boolean> - 按讚處理結果
      * 
      * 使用場景：
@@ -189,8 +189,8 @@ export class CommentService {
     /**
      * 處理取消評論按讚功能
      * 
-     * @param commentId - 要取消按讚的評論ID
-     * @param userId - 執行取消按讚的使用者ID
+     * @param {string} commentId - 要取消按讚的評論ID
+     * @param {string} userId - 執行取消按讚的使用者ID
      * @returns Promise<boolean> - 取消按讚處理結果
      * 
      * 使用場景：
@@ -245,7 +245,7 @@ export class CommentService {
     /**
      * 根據ID獲取評論
      * 
-     * @param commentId - 評論ID
+     * @param {string} commentId - 評論ID
      * 
      * 實作重點：
      * 1. 使用 lean() 提升查詢效能

@@ -285,8 +285,8 @@ export class PostController {
      * - 當用戶點擊空心愛心時調用
      * - 前端需確保只在未按讚狀態下調用
      * 
-     * @param req - 請求物件，需包含 postId 參數和認證用戶資訊
-     * @param res - 回應物件
+     * @param {Request} req - 請求物件，需包含 postId 參數和認證用戶資訊
+     * @param {Response} res - 回應物件
      */
     likePost = async (req: Request, res: Response): Promise<void> => {
         try {
@@ -327,8 +327,8 @@ export class PostController {
      * - 當用戶點擊紅色愛心時調用
      * - 前端需確保只在已按讚狀態下調用
      * 
-     * @param req - 請求物件，需包含 postId 參數和認證用戶資訊
-     * @param res - 回應物件
+     * @param {Request} req - 請求物件，需包含 postId 參數和認證用戶資訊
+     * @param {Response} res - 回應物件
      */
     unlikePost = async (req: Request, res: Response): Promise<void> => {
         try {

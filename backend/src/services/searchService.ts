@@ -11,10 +11,10 @@ import { Types } from "mongoose";
 export class SearchService {
     /**
      * 搜索貼文
-     * @param query 搜索關鍵字
-     * @param cursor 游標（上一頁最後一筆資料的ID）
-     * @param limit 每頁數量
-     * @param currentUserId 當前登入用戶的ID（用於檢查追蹤關係）
+     * @param {string} query 搜索關鍵字
+     * @param {string} cursor 游標（上一頁最後一筆資料的ID）
+     * @param {number} limit 每頁數量
+     * @param {string} currentUserId 當前登入用戶的ID（用於檢查追蹤關係）
      */
     async searchPosts(query: string, cursor?: string, limit: number = 10, currentUserId?: string) {
         try {

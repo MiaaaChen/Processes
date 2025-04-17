@@ -76,7 +76,7 @@ export class PostService {
     }
     /**
      * 隨機打亂陣列順序
-     * @param array - 需要打亂的陣列
+     * @param {Array<*>} array - 需要打亂的陣列
      * @returns 打亂後的陣列
      */
     private shuffleArray = <T>(array: T[]): T[] => {
@@ -89,9 +89,9 @@ export class PostService {
     /**
      * 獲取所有貼文，支援無限捲動分頁
      * 
-     * @param limit - 每頁返回的貼文數量
-     * @param cursor - 分頁游標，為上一頁最後一篇貼文的時間戳
-     * @param userId - 當前用戶ID，用於獲取私密貼文
+     * @param {number} limit - 每頁返回的貼文數量
+     * @param {string} cursor - 分頁游標，為上一頁最後一篇貼文的時間戳
+     * @param {string} userId - 當前用戶ID，用於獲取私密貼文
      * 
      * 實現要點：
      * 1. 使用 lean() 提升查詢效能，因為不需要完整的 Mongoose 文檔
@@ -137,8 +137,8 @@ export class PostService {
     /**
      * 建立新貼文
      * 
-     * @param userId - 發文用戶ID
-     * @param content - 貼文內容
+     * @param {string} userId - 發文用戶ID
+     * @param {string} content - 貼文內容
      * 
      * 實現要點：
      * 1. 驗證內容長度限制
@@ -165,9 +165,9 @@ export class PostService {
     /**
      * 更新貼文內容
      * 
-     * @param postId - 貼文ID
-     * @param userId - 當前用戶ID
-     * @param content - 新的貼文內容
+     * @param {string} postId - 貼文ID
+     * @param {string} userId - 當前用戶ID
+     * @param {string} content - 新的貼文內容
      * 
      * 實現要點：
      * 1. 使用 updateOne 而非 findOneAndUpdate，因為不需要返回更新後的文檔
@@ -208,8 +208,8 @@ export class PostService {
     /**
      * 刪除貼文及相關資料
      * 
-     * @param postId - 貼文ID
-     * @param userId - 當前用戶ID
+     * @param {string} postId - 貼文ID
+     * @param {string} userId - 當前用戶ID
      * 
      * 實現要點：
      * 1. 使用事務確保資料一致性
@@ -256,8 +256,8 @@ export class PostService {
     /**
      * 處理貼文按讚功能
      * 
-     * @param postId - 要按讚的貼文ID
-     * @param userId - 執行按讚的使用者ID
+     * @param {string} postId - 要按讚的貼文ID
+     * @param {string} userId - 執行按讚的使用者ID
      * @returns Promise<boolean> - 按讚處理結果
      * 
      * 使用場景：
@@ -345,8 +345,8 @@ export class PostService {
     /**
      * 處理取消貼文按讚功能
      * 
-     * @param postId - 要取消按讚的貼文ID
-     * @param userId - 執行取消按讚的使用者ID
+     * @param {string} postId - 要取消按讚的貼文ID
+     * @param {string} userId - 執行取消按讚的使用者ID
      * @returns Promise<boolean> - 取消按讚處理結果
      * 
      * 使用場景：
@@ -425,9 +425,9 @@ export class PostService {
     /**
      * 新增評論到貼文
      * 
-     * @param postId - 貼文ID
-     * @param userId - 當前用戶ID
-     * @param content - 評論內容
+     * @param {string} postId - 貼文ID
+     * @param {string} userId - 當前用戶ID
+     * @param {string} content - 評論內容
      * 
      * 實現要點：
      * 1. 使用 updateOne 高效更新貼文的評論列表
