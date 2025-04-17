@@ -1,4 +1,3 @@
-// tests/controllers/userController.test.ts
 import mongoose, { Types } from "mongoose";
 import { User, IUserDocument } from "@src/models/user";
 import { UserService } from "@src/services/userService";
@@ -9,14 +8,8 @@ import "@tests/setup";
 import redisClient from "@src/config/redis";
 import { eventService } from "@src/services/eventService";
 
-
 // 模擬 Response 對象
 const mockResponse = () => {
-    const res: Partial<Response> = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    return res as Response;
     const res: Partial<Response> = {};
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
@@ -72,9 +65,7 @@ describe("UserController", () => {
             } as unknown as Request<ParamsDictionary>;
 
             const res = mockResponse();
-            const res = mockResponse();
 
-            await controller.getUserProfile(req, res);
             await controller.getUserProfile(req, res);
 
             expect(res.json).toHaveBeenCalledWith(
@@ -90,7 +81,6 @@ describe("UserController", () => {
             );
         });
 
-
         it("應該回傳 404，當用戶不存在時", async () => {
             const nonExistentId = new mongoose.Types.ObjectId();
             const req = {
@@ -104,14 +94,10 @@ describe("UserController", () => {
             expect(res.json).toHaveBeenCalledWith({ msg: "使用者不存在" });
         });
     });
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ msg: "使用者不存在" });
-        });
-    });
 
     describe("updateUserProfile", () => {
         it("應該成功更新用戶資料", async () => {
-            const req = {
+            const req: Request = {
                 user: testUser,
                 body: {
                     userName: "newuserName",
@@ -122,9 +108,7 @@ describe("UserController", () => {
             } as unknown as Request;
 
             const res = mockResponse();
-            const res = mockResponse();
 
-            await controller.updateUserProfile(req, res);
             await controller.updateUserProfile(req, res);
 
             // 由於 Redis 緩存和其他異步操作，等待一小段時間
@@ -155,13 +139,6 @@ describe("UserController", () => {
 
     describe("followUser", () => {
         it("應該成功關注另一個用戶", async () => {
-    describe("followUser", () => {
-        it("應該成功關注另一個用戶", async () => {
-
-            const req: Request = {
-                body: { userId: anotherUser._id.toString() },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: anotherUser._id.toString() },
                 user: testUser,
@@ -175,15 +152,8 @@ describe("UserController", () => {
         });
 
         it("應該回傳 404，當被關注的用戶不存在時", async () => {
-        it("應該回傳 404，當被關注的用戶不存在時", async () => {
-
-            const nonExistentUserId = new mongoose.Types.ObjectId().toString();
             const nonExistentUserId = new mongoose.Types.ObjectId().toString();
 
-            const req: Request = {
-                body: { userId: nonExistentUserId },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: nonExistentUserId },
                 user: testUser,
@@ -197,12 +167,6 @@ describe("UserController", () => {
         });
 
         it("應該回傳 404，當已經關注該用戶時", async () => {
-        it("應該回傳 404，當已經關注該用戶時", async () => {
-
-            const req: Request = {
-                body: { userId: anotherUser._id.toString() },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: anotherUser._id.toString() },
                 user: testUser,
@@ -215,17 +179,8 @@ describe("UserController", () => {
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({ msg: "找不到或已經追蹤該使用者" });
         });
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ msg: "找不到或已經追蹤該使用者" });
-        });
 
         it("應該回傳 500，當發生伺服器錯誤時", async () => {
-        it("應該回傳 500，當發生伺服器錯誤時", async () => {
-
-            const req: Request = {
-                body: { userId: anotherUser._id.toString() },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: anotherUser._id.toString() },
                 user: testUser,
@@ -238,19 +193,9 @@ describe("UserController", () => {
             expect(res.status).toHaveBeenCalledWith(500);
         });
     });
-            expect(res.status).toHaveBeenCalledWith(500);
-        });
-    });
 
     describe("unFollowUser", () => {
         it("應該成功取消關注另一個用戶", async () => {
-    describe("unFollowUser", () => {
-        it("應該成功取消關注另一個用戶", async () => {
-
-            const req: Request = {
-                body: { userId: anotherUser._id.toString() },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: anotherUser._id.toString() },
                 user: testUser,
@@ -264,15 +209,8 @@ describe("UserController", () => {
         });
 
         it("應該回傳 404，當被取消關注的用戶不存在時", async () => {
-        it("應該回傳 404，當被取消關注的用戶不存在時", async () => {
-
-            const nonExistentUserId = new mongoose.Types.ObjectId().toString();
             const nonExistentUserId = new mongoose.Types.ObjectId().toString();
 
-            const req: Request = {
-                body: { userId: nonExistentUserId },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: nonExistentUserId },
                 user: testUser,
@@ -286,12 +224,6 @@ describe("UserController", () => {
         });
 
         it("應該回傳 404，當尚未關注該用戶時", async () => {
-        it("應該回傳 404，當尚未關注該用戶時", async () => {
-
-            const req: Request = {
-                body: { userId: anotherUser._id.toString() },
-                user: testUser,
-            } as Request;
             const req: Request = {
                 body: { userId: anotherUser._id.toString() },
                 user: testUser,
@@ -303,14 +235,7 @@ describe("UserController", () => {
 
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({ msg: "找不到或尚未追蹤該使用者" });
-        }
-        );
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ msg: "找不到或尚未追蹤該使用者" });
-        }
-        );
-
-    });
+        });
     });
 });
 
