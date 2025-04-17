@@ -11,9 +11,9 @@ import searchRoutes from "@src/routes/searchRoutes";
 import eventRoutes from "@src/routes/eventRoutes";
 import { setupElasticsearch } from '@src/utils/elasticSearchSetup';
 
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import swaggerOptions from "@src/swaggerOptions";
+// import swaggerJsdoc from "swagger-jsdoc";
+// import swaggerUi from "swagger-ui-express";
+// import swaggerOptions from "@src/swaggerOptions";
 import cors from "cors";
 import path from "path";
 
@@ -26,9 +26,8 @@ app.use(cors());
 initializePassport(passport); // 初始化 Passport
 app.use(passport.initialize());
 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// const swaggerSpec = swaggerJsdoc(swaggerOptions);
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // 在 MongoDB 連接成功後調用
 mongoose
