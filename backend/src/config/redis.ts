@@ -14,8 +14,7 @@ if (process.env.NODE_ENV === "test") {
     }
 
     redisClient = new Redis(redisUrl, {
-        db: 0,
-        tls: {},
+        tls: redisUrl.startsWith("rediss://") ? {} : undefined,
     });
 
     redisClient.on("connect", () => {
@@ -24,6 +23,7 @@ if (process.env.NODE_ENV === "test") {
 
     redisClient.on("error", (err) => {
         console.error("Redis connection error:", err);
+        console.trace("Redis error triggered stack trace");
     });
 }
 
