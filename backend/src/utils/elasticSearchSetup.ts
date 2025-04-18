@@ -19,81 +19,83 @@ export async function setupElasticsearch() {
         if (!postsIndexExists) {
             await client.indices.create({
                 index: 'posts',
-                settings: {
-                    analysis: {
-                        analyzer: {
-                            chinese_analyzer: {
-                                type: 'custom',
-                                tokenizer: 'smartcn_tokenizer'
+                body: {
+                    settings: {
+                        analysis: {
+                            analyzer: {
+                                chinese_analyzer: {
+                                    type: 'custom',
+                                    tokenizer: 'smartcn_tokenizer'
+                                },
+                                english_analyzer: {
+                                    type: 'custom',
+                                    tokenizer: 'standard',
+                                    filter: [
+                                        'lowercase',
+                                        'asciifolding',
+                                        'english_stop',
+                                        'english_stemmer',
+                                        'english_possessive_stemmer',
+                                        'edge_ngram_filter'
+                                    ]
+                                }
                             },
-                            english_analyzer: {
-                                type: 'custom',
-                                tokenizer: 'standard',
-                                filter: [
-                                    'lowercase',
-                                    'asciifolding',
-                                    'english_stop',
-                                    'english_stemmer',
-                                    'english_possessive_stemmer',
-                                    'edge_ngram_filter'
-                                ]
-                            }
-                        },
-                        filter: {
-                            ngram_filter: {
-                                type: 'ngram',
-                                min_gram: 1,
-                                max_gram: 2
-                            },
-                            edge_ngram_filter: {
-                                type: 'edge_ngram',
-                                min_gram: 2,
-                                max_gram: 15
-                            },
-                            english_stop: {
-                                type: 'stop',
-                                stopwords: '_english_'
-                            },
-                            english_stemmer: {
-                                type: 'stemmer',
-                                language: 'english'
-                            },
-                            english_possessive_stemmer: {
-                                type: 'stemmer',
-                                language: 'possessive_english'
+                            filter: {
+                                ngram_filter: {
+                                    type: 'ngram',
+                                    min_gram: 1,
+                                    max_gram: 2
+                                },
+                                edge_ngram_filter: {
+                                    type: 'edge_ngram',
+                                    min_gram: 2,
+                                    max_gram: 15
+                                },
+                                english_stop: {
+                                    type: 'stop',
+                                    stopwords: '_english_'
+                                },
+                                english_stemmer: {
+                                    type: 'stemmer',
+                                    language: 'english'
+                                },
+                                english_possessive_stemmer: {
+                                    type: 'stemmer',
+                                    language: 'possessive_english'
+                                }
                             }
                         }
-                    }
-                },
-                mappings: {
-                    properties: {
-                        content: {
-                            type: 'text',
-                            analyzer: 'chinese_analyzer',
-                            search_analyzer: 'chinese_analyzer',
-                            fields: {
-                                english: {
-                                    type: 'text',
-                                    analyzer: 'english_analyzer',
-                                    search_analyzer: 'english_analyzer'
+                    },
+                    mappings: {
+                        properties: {
+                            content: {
+                                type: 'text',
+                                analyzer: 'chinese_analyzer',
+                                search_analyzer: 'chinese_analyzer',
+                                fields: {
+                                    english: {
+                                        type: 'text',
+                                        analyzer: 'english_analyzer',
+                                        search_analyzer: 'english_analyzer'
+                                    }
                                 }
-                            }
-                        },
-                        userId: { type: 'keyword' },
-                        userName: {
-                            type: 'text',
-                            analyzer: 'chinese_analyzer',
-                            fields: {
-                                english: {
-                                    type: 'text',
-                                    analyzer: 'english_analyzer'
-                                },
-                                keyword: {
-                                    type: 'keyword'
+                            },
+                            userId: { type: 'keyword' },
+                            userName: {
+                                type: 'text',
+                                analyzer: 'chinese_analyzer',
+                                fields: {
+                                    english: {
+                                        type: 'text',
+                                        analyzer: 'english_analyzer'
+                                    },
+                                    keyword: {
+                                        type: 'keyword'
+                                    }
                                 }
-                            }
-                        },
-                        createdAt: { type: 'date' }
+                            },
+                            createdAt: { type: 'date' }
+                        }
                     }
                 }
             });
@@ -103,113 +105,113 @@ export async function setupElasticsearch() {
         if (!usersIndexExists) {
             await client.indices.create({
                 index: 'users',
-                settings: {
-                    analysis: {
-                        analyzer: {
-                            chinese_analyzer: {
-                                type: 'custom',
-                                tokenizer: 'standard',
-                                filter: [
-                                    'lowercase',
-                                    'asciifolding',
-                                    'ngram_filter'
-                                ],
-                                char_filter: [
-                                    'html_strip'
-                                ]
+                body: {
+                    settings: {
+                        analysis: {
+                            analyzer: {
+                                chinese_analyzer: {
+                                    type: 'custom',
+                                    tokenizer: 'standard',
+                                    filter: [
+                                        'lowercase',
+                                        'asciifolding',
+                                        'ngram_filter'
+                                    ],
+                                    char_filter: [
+                                        'html_strip'
+                                    ]
+                                },
+                                english_analyzer: {
+                                    type: 'custom',
+                                    tokenizer: 'standard',
+                                    filter: [
+                                        'lowercase',
+                                        'asciifolding',
+                                        'english_stop',
+                                        'english_stemmer',
+                                        'english_possessive_stemmer',
+                                        'edge_ngram_filter'
+                                    ]
+                                }
                             },
-                            english_analyzer: {
-                                type: 'custom',
-                                tokenizer: 'standard',
-                                filter: [
-                                    'lowercase',
-                                    'asciifolding',
-                                    'english_stop',
-                                    'english_stemmer',
-                                    'english_possessive_stemmer',
-                                    'edge_ngram_filter'
-                                ]
-                            }
-                        },
-                        filter: {
-                            ngram_filter: {
-                                type: 'ngram',
-                                min_gram: 1,
-                                max_gram: 2
-                            },
-                            edge_ngram_filter: {
-                                type: 'edge_ngram',
-                                min_gram: 2,
-                                max_gram: 15
-                            },
-                            english_stop: {
-                                type: 'stop',
-                                stopwords: '_english_'
-                            },
-                            english_stemmer: {
-                                type: 'stemmer',
-                                language: 'english'
-                            },
-                            english_possessive_stemmer: {
-                                type: 'stemmer',
-                                language: 'possessive_english'
+                            filter: {
+                                ngram_filter: {
+                                    type: 'ngram',
+                                    min_gram: 1,
+                                    max_gram: 2
+                                },
+                                edge_ngram_filter: {
+                                    type: 'edge_ngram',
+                                    min_gram: 2,
+                                    max_gram: 15
+                                },
+                                english_stop: {
+                                    type: 'stop',
+                                    stopwords: '_english_'
+                                },
+                                english_stemmer: {
+                                    type: 'stemmer',
+                                    language: 'english'
+                                },
+                                english_possessive_stemmer: {
+                                    type: 'stemmer',
+                                    language: 'possessive_english'
+                                }
                             }
                         }
-                    }
-                },
-                mappings: {
-                    properties: {
-                        userName: {
-                            type: 'text',
-                            analyzer: 'chinese_analyzer',
-                            fields: {
-                                english: {
-                                    type: 'text',
-                                    analyzer: 'english_analyzer'
-                                },
-                                keyword: {
-                                    type: 'keyword'
+                    },
+                    mappings: {
+                        properties: {
+                            userName: {
+                                type: 'text',
+                                analyzer: 'chinese_analyzer',
+                                fields: {
+                                    english: {
+                                        type: 'text',
+                                        analyzer: 'english_analyzer'
+                                    },
+                                    keyword: {
+                                        type: 'keyword'
+                                    }
                                 }
-                            }
-                        },
-                        accountName: {
-                            type: 'text',
-                            analyzer: 'chinese_analyzer',
-                            fields: {
-                                english: {
-                                    type: 'text',
-                                    analyzer: 'english_analyzer'
-                                },
-                                keyword: {
-                                    type: 'keyword'
+                            },
+                            accountName: {
+                                type: 'text',
+                                analyzer: 'chinese_analyzer',
+                                fields: {
+                                    english: {
+                                        type: 'text',
+                                        analyzer: 'english_analyzer'
+                                    },
+                                    keyword: {
+                                        type: 'keyword'
+                                    }
                                 }
-                            }
-                        },
-                        bio: {
-                            type: 'text',
-                            analyzer: 'chinese_analyzer',
-                            fields: {
-                                english: {
-                                    type: 'text',
-                                    analyzer: 'english_analyzer'
+                            },
+                            bio: {
+                                type: 'text',
+                                analyzer: 'chinese_analyzer',
+                                fields: {
+                                    english: {
+                                        type: 'text',
+                                        analyzer: 'english_analyzer'
+                                    }
                                 }
-                            }
-                        },
-                        isPublic: { type: 'boolean' },
-                        avatarUrl: { type: 'keyword' },
-                        followersCount: { type: 'integer' },
-                        followingCount: { type: 'integer' },
-                        createdAt: { type: 'date' }
+                            },
+                            isPublic: { type: 'boolean' },
+                            avatarUrl: { type: 'keyword' },
+                            followersCount: { type: 'integer' },
+                            followingCount: { type: 'integer' },
+                            createdAt: { type: 'date' }
+                        }
                     }
                 }
             });
         }
 
-        // 同步現有的貼文
         const posts = await Post.find().populate('user', 'userName');
         const users = await User.find();
 
-        // 如果有現有的貼文，執行批量索引
         if (posts.length > 0) {
             const bulkOperations = posts.flatMap(post => [
                 { index: { _index: 'posts', _id: post._id.toString() } },
@@ -222,12 +224,11 @@ export async function setupElasticsearch() {
             ]);
 
             await client.bulk({
-                operations: bulkOperations,
+                body: bulkOperations,
                 refresh: true
             });
         }
 
-        // 如果有現有的用戶，執行批量索引
         if (users.length > 0) {
             const bulkOperations = users.flatMap(user => [
                 { index: { _index: 'users', _id: user._id.toString() } },
@@ -244,7 +245,7 @@ export async function setupElasticsearch() {
             ]);
 
             await client.bulk({
-                operations: bulkOperations,
+                body: bulkOperations,
                 refresh: true
             });
         }
