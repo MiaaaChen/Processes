@@ -24,7 +24,12 @@ export async function setupElasticsearch() {
                         analyzer: {
                             chinese_analyzer: {
                                 type: 'custom',
-                                tokenizer: 'smartcn_tokenizer'
+                                tokenizer: 'standard',
+                                filter: [
+                                    'lowercase',
+                                    'asciifolding',
+                                    'ngram_filter'
+                                ]
                             },
                             english_analyzer: {
                                 type: 'custom',
