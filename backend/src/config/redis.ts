@@ -13,9 +13,9 @@ if (process.env.NODE_ENV === "test") {
         throw new Error("REDIS_URL is not defined in environment variables.");
     }
 
-    redisClient = new Redis(redisUrl, {
-        tls: redisUrl.startsWith("rediss://") ? {} : undefined,
-    });
+    const isTls = redisUrl.startsWith("rediss://");
+
+    redisClient = new Redis(redisUrl, isTls ? { tls: {} } : {});
 
     redisClient.on("connect", () => {
         console.log("Connected to Redis");
