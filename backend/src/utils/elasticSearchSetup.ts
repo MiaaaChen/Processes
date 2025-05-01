@@ -5,6 +5,11 @@ import { User } from '@src/models/user';
 import { IUserDocument } from '@src/models/user';
 
 export async function setupElasticsearch() {
+    if (!client) {
+        console.warn("Elasticsearch client not initialized. Skipping setup.");
+        return; // ← 如果沒設環境變數，直接跳過 setup
+    }
+    
     try {
         // 檢查索引是否存在
         const postsIndexExists = await client.indices.exists({
