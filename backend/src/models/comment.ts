@@ -1,6 +1,7 @@
 // src/models/comment.ts
 import { Schema, Types, model, HydratedDocument } from "mongoose";
 import client from "@src/config/elasticsearch";
+import { Client } from "@elastic/elasticsearch";
 import { IUserDocument } from "./user";
 
 export interface IComment {
@@ -17,7 +18,7 @@ export type ICommentDocument = HydratedDocument<IComment>;
 // 同步到 Elasticsearch 的輔助函數
 async function syncToElasticsearch(doc: ICommentDocument, operation: 'index' | 'delete') {
   try {
-    if (!doc) return;
+    if (!doc || !client) return;
 
     // 確保 user 字段被填充
     if (!doc.populated('user')) {
@@ -28,7 +29,7 @@ async function syncToElasticsearch(doc: ICommentDocument, operation: 'index' | '
       // 確保 user 是完整的 document 而不是 ObjectId
       const user = doc.user as unknown as IUserDocument;
 
-      await client.index({
+      await (client as Client).index({
         index: 'comments',
         id: doc._id.toString(),
         body: {
@@ -45,7 +46,7 @@ async function syncToElasticsearch(doc: ICommentDocument, operation: 'index' | '
       });
       console.log(`Comment ${doc._id} indexed in Elasticsearch`);
     } else if (operation === 'delete') {
-      await client.delete({
+      await (client as Client).delete({
         index: 'comments',
         id: doc._id.toString(),
       });

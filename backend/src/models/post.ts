@@ -2,6 +2,7 @@
 import { Schema, Types, model, HydratedDocument } from "mongoose";
 import { IUserDocument } from "@src/models/user";
 import client from "@src/config/elasticsearch";
+import { Client } from "@elastic/elasticsearch";
 
 export interface IPost {
   user: Types.ObjectId | IUserDocument;
@@ -61,7 +62,7 @@ const postSchema = new Schema<IPostDocument>(
 // Elasticsearch 同步中間件
 async function syncToElasticsearch(doc: IPostDocument, operation: 'index' | 'delete') {
   try {
-    if (!doc) return;
+    if (!doc || !client) return;
 
     // 確保 user 字段被填充
     if (typeof doc.user === 'object' && !doc.populated('user')) {
@@ -69,7 +70,7 @@ async function syncToElasticsearch(doc: IPostDocument, operation: 'index' | 'del
     }
 
     if (operation === 'index') {
-      await client.index({
+      await (client as Client).index({
         index: 'posts',
         id: doc._id.toString(),
         body: {
@@ -83,7 +84,7 @@ async function syncToElasticsearch(doc: IPostDocument, operation: 'index' | 'del
       });
       console.log(`Post ${doc._id} indexed in Elasticsearch`);
     } else if (operation === 'delete') {
-      await client.delete({
+      await (client as Client).delete({
         index: 'posts',
         id: doc._id.toString(),
       });

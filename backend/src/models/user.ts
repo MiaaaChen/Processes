@@ -1,6 +1,7 @@
 // src/models/user.ts
 import { Schema, model, HydratedDocument } from "mongoose";
 import client from "@src/config/elasticsearch";
+import { Client } from "@elastic/elasticsearch";
 
 export interface IUser {
   accountName: string;
@@ -22,10 +23,10 @@ export type IUserDocument = HydratedDocument<IUser>
 // 同步到 Elasticsearch 的輔助函數
 async function syncToElasticsearch(doc: IUserDocument, operation: 'index' | 'delete') {
   try {
-    if (!doc) return;
+    if (!doc || !client) return;
 
     if (operation === 'index') {
-      await client.index({
+      await (client as Client).index({
         index: 'users',
         id: doc._id.toString(),
         body: {
@@ -41,7 +42,7 @@ async function syncToElasticsearch(doc: IUserDocument, operation: 'index' | 'del
       });
       console.log(`User ${doc._id} indexed in Elasticsearch`);
     } else if (operation === 'delete') {
-      await client.delete({
+      await (client as Client).delete({
         index: 'users',
         id: doc._id.toString(),
       });
