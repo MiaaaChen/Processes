@@ -17,6 +17,16 @@ export class SearchService {
      * @param {string} currentUserId 當前登入用戶的ID（用於檢查追蹤關係）
      */
     async searchPosts(query: string, cursor?: string, limit: number = 10, currentUserId?: string) {
+        if (!client) {
+            // 直接回傳空資料，前端會顯示「搜尋功能暫時無法使用」
+            console.warn('Elasticsearch not initialized — skipping search.');
+            return {
+                posts: [],
+                users: [],
+                nextCursor: null
+            };
+        }
+    
         try {
             let visibleUserIds = [];
 

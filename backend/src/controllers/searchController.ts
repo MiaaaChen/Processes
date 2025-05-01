@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import { searchService, SearchService } from "@src/services/searchService";
 import { IUserDocument } from "@src/models/user";
+import client from "@src/config/elasticsearch";
 
 export class SearchController {
     constructor(private searchService: SearchService) { }
@@ -12,6 +13,11 @@ export class SearchController {
      */
     searchPosts = async (req: Request, res: Response): Promise<void> => {
         try {
+            if (!client) {
+                res.status(503).json({ message: "Search service temporarily unavailable" });
+                return;
+            }
+
             const { q, cursor, limit = "10" } = req.query;
             if (!q || typeof q !== 'string') {
                 res.status(400).json({ message: "Search query is required" });
