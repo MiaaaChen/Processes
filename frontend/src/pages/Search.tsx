@@ -299,7 +299,12 @@ const Search: React.FC = () => {
         >
           <Tabs
             value={activeTab}
-            onChange={(_, newValue) => setActiveTab(newValue)}
+            onChange={(_, newValue) => {
+              setActiveTab(newValue);
+              setQuery("");
+              setSearchResults(null);
+              setError(null);
+            }}
             centered
           >
             <Tab label="貼文" />
