@@ -321,7 +321,13 @@ const Search: React.FC = () => {
 
         {/* 錯誤訊息 */}
         {error && (
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mt={4}
+            py={4}
+          >
             <Typography color="text.secondary">{error}</Typography>
           </Box>
         )}
