@@ -29,9 +29,18 @@ export class SearchController {
             );
 
             res.status(200).json(result);
-        } catch (error) {
-            console.error('Error in searchPosts controller:', error);
-            res.status(500).json({ message: "Internal server error" });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.error("Error in searchUsers controller:", error);
+
+            const statusCode = error?.meta?.statusCode || error?.statusCode;
+            const message = error?.message || "";
+
+            if (statusCode === 503 || message.includes("connect") || message.includes("ECONNREFUSED")) {
+                res.status(503).json({ message: "Search service temporarily unavailable" });
+            } else {
+                res.status(500).json({ message: "Internal server error" });
+            }
         }
     };
 
@@ -57,9 +66,18 @@ export class SearchController {
             );
 
             res.status(200).json(result);
-        } catch (error) {
-            console.error('Error in searchUsers controller:', error);
-            res.status(500).json({ message: "Internal server error" });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.error("Error in searchUsers controller:", error);
+
+            const statusCode = error?.meta?.statusCode || error?.statusCode;
+            const message = error?.message || "";
+
+            if (statusCode === 503 || message.includes("connect") || message.includes("ECONNREFUSED")) {
+                res.status(503).json({ message: "Search service temporarily unavailable" });
+            } else {
+                res.status(500).json({ message: "Internal server error" });
+            }
         }
     };
 

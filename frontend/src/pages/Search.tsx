@@ -204,9 +204,13 @@ const Search: React.FC = () => {
       );
 
       setSearchResults(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error("搜尋失敗", error);
-      setError("搜尋時發生錯誤，請稍後再試");
+      if (error.response?.status === 503) {
+        setError("搜尋功能暫時無法使用，請稍後再試");
+      } else {
+        setError("搜尋時發生錯誤，請稍後再試");
+      }
     } finally {
       setLoading(false);
     }
@@ -238,12 +242,12 @@ const Search: React.FC = () => {
           posts: prev.posts.map((post) =>
             post.postId === postId
               ? {
-                  ...post,
-                  likesCount: isLiked
-                    ? post.likesCount - 1
-                    : post.likesCount + 1,
-                  isLiked: !isLiked,
-                }
+                ...post,
+                likesCount: isLiked
+                  ? post.likesCount - 1
+                  : post.likesCount + 1,
+                isLiked: !isLiked,
+              }
               : post,
           ),
         };
@@ -312,7 +316,7 @@ const Search: React.FC = () => {
 
         {/* 錯誤訊息 */}
         {error && (
-          <Typography color="error" sx={{ mt: 2 }}>
+          <Typography color="text.secondary" sx={{ mt: 2 }}>
             {error}
           </Typography>
         )}
@@ -322,64 +326,64 @@ const Search: React.FC = () => {
           <Box width="100%" mt={2}>
             {activeTab === 0
               ? // 貼文搜尋結果
-                searchResults.posts.map((post) => (
-                  <Box
-                    key={post.postId}
-                    sx={{
-                      padding: 2,
-                      borderBottom: "1px solid #eee",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => navigate(`/posts/${post.postId}`)}
-                  >
-                    <Box display="flex" alignItems="center" mb={1}>
-                      <Avatar
-                        src={post.author.avatarUrl}
-                        sx={{ width: 40, height: 40, mr: 1 }}
-                      />
-                      <Box>
-                        <Typography variant="subtitle1">
-                          {post.author.userName}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          @{post.author.accountName}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Typography sx={{ mb: 1 }}>{post.content}</Typography>
-                    <Box display="flex" alignItems="center" gap={2}>
-                      <Box display="flex" alignItems="center">
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleToggleLike(post.postId, post.isLiked);
-                          }}
-                        >
-                          {post.isLiked ? (
-                            <FavoriteIcon color="error" />
-                          ) : (
-                            <FavoriteBorderIcon />
-                          )}
-                        </IconButton>
-                        <Typography variant="caption">
-                          {post.likesCount}
-                        </Typography>
-                      </Box>
-                      <Box display="flex" alignItems="center">
-                        <IconButton>
-                          <ChatBubbleOutlineIcon />
-                        </IconButton>
-                        <Typography variant="caption">
-                          {post.commentCount}
-                        </Typography>
-                      </Box>
+              searchResults.posts.map((post) => (
+                <Box
+                  key={post.postId}
+                  sx={{
+                    padding: 2,
+                    borderBottom: "1px solid #eee",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate(`/posts/${post.postId}`)}
+                >
+                  <Box display="flex" alignItems="center" mb={1}>
+                    <Avatar
+                      src={post.author.avatarUrl}
+                      sx={{ width: 40, height: 40, mr: 1 }}
+                    />
+                    <Box>
+                      <Typography variant="subtitle1">
+                        {post.author.userName}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        @{post.author.accountName}
+                      </Typography>
                     </Box>
                   </Box>
-                ))
+                  <Typography sx={{ mb: 1 }}>{post.content}</Typography>
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Box display="flex" alignItems="center">
+                      <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleLike(post.postId, post.isLiked);
+                        }}
+                      >
+                        {post.isLiked ? (
+                          <FavoriteIcon color="error" />
+                        ) : (
+                          <FavoriteBorderIcon />
+                        )}
+                      </IconButton>
+                      <Typography variant="caption">
+                        {post.likesCount}
+                      </Typography>
+                    </Box>
+                    <Box display="flex" alignItems="center">
+                      <IconButton>
+                        <ChatBubbleOutlineIcon />
+                      </IconButton>
+                      <Typography variant="caption">
+                        {post.commentCount}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              ))
               : // 用戶搜尋結果
-                searchResults.users.map((user) => (
-                  <UserListItem key={user.id} user={user} />
-                ))}
+              searchResults.users.map((user) => (
+                <UserListItem key={user.id} user={user} />
+              ))}
           </Box>
         )}
       </Box>
