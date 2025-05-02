@@ -335,8 +335,17 @@ const Search: React.FC = () => {
         {/* 搜尋結果 */}
         {searchResults && !loading && (
           <Box width="100%" mt={2}>
-            {activeTab === 0
-              ? // 貼文搜尋結果
+            {activeTab === 0 ? ( // 貼文搜尋結果
+              searchResults.posts.length === 0 ? (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  py={4}
+                >
+                  <Typography color="text.secondary">沒有符合的貼文</Typography>
+                </Box>
+              ) : (
                 searchResults.posts.map((post) => (
                   <Box
                     key={post.postId}
@@ -391,10 +400,22 @@ const Search: React.FC = () => {
                     </Box>
                   </Box>
                 ))
-              : // 用戶搜尋結果
-                searchResults.users.map((user) => (
-                  <UserListItem key={user.id} user={user} />
-                ))}
+              )
+            ) : // 用戶搜尋結果
+            searchResults.users.length === 0 ? (
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                py={4}
+              >
+                <Typography color="text.secondary">沒有符合的用戶</Typography>
+              </Box>
+            ) : (
+              searchResults.users.map((user) => (
+                <UserListItem key={user.id} user={user} />
+              ))
+            )}
           </Box>
         )}
       </Box>
